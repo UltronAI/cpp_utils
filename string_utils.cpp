@@ -1,7 +1,7 @@
 #include "string_utils.h"
 
-std::vector<std::string> cpp_utils::string_utils::split_string(const std::string original_str, 
-                                                               const std::string delimiter) {
+std::vector<std::string> SUtils::split(const std::string original_str, 
+                                       const std::string delimiter) {
 	std::vector<std::string> split_result;
     std::string str{ original_str };
     size_t pos = 0;
@@ -20,29 +20,39 @@ std::vector<std::string> cpp_utils::string_utils::split_string(const std::string
     return split_result;
 }
 
-std::string cpp_utils::string_utils::l_strip_string(const std::string original_str, 
-                                                    const std::string flag = cpp_utils::string_utils::WHITESPACE) {
+std::string SUtils::lstrip(const std::string original_str, 
+                           const std::string trim) {
     // By default, remove WHITESPACE from left side of the string
     std::string str{ original_str };
-    size_t start = str.find_first_not_of(flag);
+    size_t start = str.find_first_not_of(trim);
     return (start == std::string::npos) ? "" : str.substr(start);
 }
 
-std::string cpp_utils::string_utils::r_strip_string(const std::string original_str, 
-                                                    const std::string flag = cpp_utils::string_utils::WHITESPACE) {
+std::string SUtils::rstrip(const std::string original_str, 
+                           const std::string trim) {
     // By default, remove WHITESPACE from right side of the string
     std::string str{ original_str };
-    size_t end = str.find_last_not_of(flag);
+    size_t end = str.find_last_not_of(trim);
     return (end == std::string::npos) ? "" : str.substr(0, end + 1);
 }
 
-std::string cpp_utils::string_utils::strip_string(const std::string original_str, 
-                                                  const std::string flag = cpp_utils::string_utils::WHITESPACE) {
+std::string SUtils::strip(const std::string original_str, 
+                          const std::string trim) {
     // By default, remove WHITESPACE from both left and right sides of the string
-    return r_strip_string(l_strip_string(original_str, flag), flag);
+    return rstrip(lstrip(original_str, trim), trim);
 }
 
-void cpp_utils::string_utils::print_string_vector(const std::vector<std::string> str_vector) {
+std::vector<std::string> SUtils::split_and_strip(const std::string original_str, 
+                                                 const std::string delimiter, 
+                                                 const std::string trim) {
+    std::vector<std::string> result = split(original_str, delimiter);
+    for (std::string& str : result) {
+        str = strip(str, trim);
+    }
+    return result;
+}
+
+void SUtils::print_string_vector(const std::vector<std::string> str_vector) {
     for (auto str : str_vector) {
         std::cout << str << std::endl;
     }
